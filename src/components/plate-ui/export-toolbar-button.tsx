@@ -159,6 +159,60 @@ export function ExportToolbarButton({ children, ...props }: DropdownMenuProps) {
     // Clean up the blob URL
     window.URL.revokeObjectURL(blobUrl);
   };
+  // Export Docx function
+  const exportToDocx = async () => {
+    const { Document, Packer, Paragraph } = await import('docx');
+
+    const components = {
+      [BaseParagraphPlugin.key]: ParagraphElementStatic,
+      [BaseHeadingPlugin.key]: HeadingElementStatic,
+      [BaseBoldPlugin.key]: withProps(SlateLeaf, { as: 'strong' }),
+      [BaseItalicPlugin.key]: withProps(SlateLeaf, { as: 'em' }),
+      [BaseUnderlinePlugin.key]: withProps(SlateLeaf, { as: 'u' }),
+      [BaseStrikethroughPlugin.key]: withProps(SlateLeaf, { as: 'del' }),
+      [BaseBlockquotePlugin.key]: BlockquoteElementStatic,
+    };
+
+    const editorStatic = createSlateEditor({
+      plugins: [
+        BaseParagraphPlugin,
+        BaseHeadingPlugin,
+        BaseBoldPlugin,
+        BaseItalicPlugin,
+        BaseUnderlinePlugin,
+        BaseStrikethroughPlugin,
+        BaseBlockquotePlugin,
+      ],
+      value: editor.children,
+    });
+
+    const editorHtml = await serializeHtml(editorStatic, { components });
+
+    // Convert HTML to plain text (basic approach)
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = editorHtml;
+    const plainText = tempDiv.innerText || tempDiv.textContent || '';
+
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [new Paragraph(plainText)],
+        },
+      ],
+    });
+
+    const blob = await Packer.toBlob(doc);
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'plate.docx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   const exportToPdf = async () => {
     const canvas = await getCanvas();
@@ -368,6 +422,7 @@ export function ExportToolbarButton({ children, ...props }: DropdownMenuProps) {
 
   return (
     <DropdownMenu modal={false} {...openState} {...props}>
+
       <DropdownMenuTrigger asChild>
         <ToolbarButton pressed={openState.open} tooltip="Export" isDropdown>
           <ArrowDownToLineIcon className="size-4" />
@@ -376,15 +431,23 @@ export function ExportToolbarButton({ children, ...props }: DropdownMenuProps) {
 
       <DropdownMenuContent align="start">
         <DropdownMenuGroup>
+          {/* Export as DOCX */}
+          <DropdownMenuItem onSelect={exportToDocx}>
+            Export as DOCX
+          </DropdownMenuItem>
+          {/* Export as HTML */}
           <DropdownMenuItem onSelect={exportToHtml}>
             Export as HTML
           </DropdownMenuItem>
+          {/* Export as PDF */}
           <DropdownMenuItem onSelect={exportToPdf}>
             Export as PDF
           </DropdownMenuItem>
+          {/* Export as Image */}
           <DropdownMenuItem onSelect={exportToImage}>
             Export as Image
           </DropdownMenuItem>
+          {/* Export as Markdown  */}
           <DropdownMenuItem onSelect={exportToMarkdown}>
             Export as Markdown
           </DropdownMenuItem>

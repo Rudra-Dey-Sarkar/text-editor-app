@@ -261,9 +261,11 @@ export function PlateEditor() {
   return (
     <DndProvider backend={HTML5Backend}>
       <Plate editor={editor}>
+        {/* Top toolbar */}
         <FixedToolbar>
           <FixedToolbarButtons />
         </FixedToolbar>
+        
         <EditorContainer>
           <Editor />
         </EditorContainer>
