@@ -1,5 +1,21 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+# Deployed Link
+
+App Link :- https://text-editor-app-seven.vercel.app/
+
+# Contacts
+
+In case you have any doubts you can contact me using below details :-
+
+Email Id :- rudradeysarkar5@gmail.com
+
+Contact No. :- +917811914148
+
+Whatsapp No. :- +919475204453
+
+LinkedIn :- https://www.linkedin.com/in/rudra-dey-sarkar-5625331ba/
+
 ## Getting Started
 
 First, run the development server:
