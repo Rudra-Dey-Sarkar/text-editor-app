@@ -83,7 +83,7 @@ function RemoteSelection({
 
   return (
     <React.Fragment>
-      {selectionRects.map((position, i) => (
+      {selectionRects.map((position: React.CSSProperties | undefined, i: React.Key | null | undefined) => (
         <div
           key={i}
           className="pointer-events-none absolute"

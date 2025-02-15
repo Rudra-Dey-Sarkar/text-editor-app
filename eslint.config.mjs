@@ -14,7 +14,10 @@ const eslintConfig = [
   {
     files: ["**/*.ts", "**/*.tsx"],
     rules: {
+      "react/display-name":["warn"],
       "react/no-unescaped-entities":["warn"],
+      "@typescript-eslint/no-empty-object-type":["warn"],
+      "@typescript-eslint/no-unused-expressions":["warn"],
       "@typescript-eslint/no-unused-vars": ["warn"],
       "react-hooks/exhaustive-deps": ["warn"],
       "@typescript-eslint/no-require-imports": ["warn"],

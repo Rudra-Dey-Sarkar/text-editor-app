@@ -39,7 +39,7 @@ export function useUploadFile({
       const res = await uploadFiles('editorUploader', {
         ...props,
         files: [file],
-        onUploadProgress: ({ progress }) => {
+        onUploadProgress: ({ progress }:any) => {
           setProgress(Math.min(progress, 100));
         },
       });
