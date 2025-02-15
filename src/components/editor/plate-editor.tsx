@@ -1,5 +1,5 @@
 'use client';
-
+import React, { useEffect } from 'react';
 import { withProps } from '@udecode/cn';
 import { usePlateEditor, Plate, ParagraphPlugin, PlateLeaf } from '@udecode/plate/react';
 import { BlockquotePlugin } from '@udecode/plate-block-quote/react';
@@ -78,7 +78,24 @@ import { FixedToolbar } from '../plate-ui/fixed-toolbar';
 import { FixedToolbarButtons } from '../plate-ui/fixed-toolbar-buttons';
 
 
+//Text preload function 
+async function Preload(editor:any) {
+  const response = await fetch("/api/preload");
+  const resData = await response.json();
+  if (resData.status === 200) {
+    editor.tf.setValue(resData?.message);
+  } else {
+    console.log(resData?.message);
+  }
+}
+
 export function PlateEditor() {
+
+  useEffect(() => {
+    Preload(editor);
+  }, []);
+
+  //Editor
   const editor = usePlateEditor({
     plugins: [
       ParagraphPlugin,
@@ -253,7 +270,7 @@ export function PlateEditor() {
       {
         id: "1",
         type: "p",
-        children: [{ text: "Hello, World!" }],
+        children: [{ text: "Hello World!" }],
       },
     ],
   });
@@ -265,7 +282,7 @@ export function PlateEditor() {
         <FixedToolbar>
           <FixedToolbarButtons />
         </FixedToolbar>
-        
+
         <EditorContainer>
           <Editor />
         </EditorContainer>
